@@ -1,0 +1,276 @@
+;==========================================================
+;
+; THIS IS AN EXAMPLE CONFIGURATION FILE!
+; IT IS NOT SUPPOSED TO WORK OUT OF THE BOX SINCE IS CONTAINS
+; SETTINGS THAT ARE SPECIFIC TO THE MACHINE WHICH WAS USED
+; TO GENERATE IT.
+; Please refer to the web documentation hosted at:
+; https://github.com/polybar/polybar#configuration
+; and
+; https://github.com/polybar/polybar/wiki/Configuration
+; if you want to automatically generate one for you.
+;
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+background = #aa2F343F
+background-alt = #444
+foreground = #dfdfdf
+foreground-alt = #dfdfdf
+primary = #8fbcbb
+secondary = #cba6f7
+alert = #bd2c40
+n1 = #5e81ac
+n2 = #81a1c1
+n3 = #88c0d0
+n4 = #8fbcbb
+
+[bar/bar1]
+;monitor = ${env:MONITOR:HDMI-1}
+width = 100%
+height = 28
+offset-x = 0%
+offset-y = 0%
+radius = 0.0
+fixed-center = true
+
+font-3 = Hurmit Nerd Font Mono:style=bold:size=13
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = #f00
+
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = fixed:pixelsize=8:style=bold;1
+font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
+font-2 = siji:pixelsize=10;1
+
+
+modules-left = bspwm i3
+modules-center = mpd
+modules-right = spotify alsa xbacklight filesystem memory _cpu_temp _wifi date wlan eth battery
+
+scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted =  %free%
+label-mounted-underline = ${colors.n4}
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.foreground-alt}
+
+
+
+[module/bspwm]
+type = internal/bspwm
+fuzzy-match = true
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;4
+ws-icon-4 = 5;5
+ws-icon-5 = 6;6
+ws-icon-6 = 7;7
+ws-icon-7 = 8;8
+ws-icon-8 = 9;
+ws-icon-9 = 10;
+
+ws-icon-default = 
+
+
+label-focused = %icon%
+label-focused-underline= ${colors.primary}
+label-focused-padding = 2
+label-occupied = %icon%
+label-occupied-padding = 2
+
+label-urgent = %icon%!
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+label-empty =
+label-empty-foreground = ${colors.foreground-alt}
+label-empty-padding = 2
+
+[module/spotify]
+type = custom/script
+interval = 1
+format-prefix = " "
+format = <label>
+exec = python3 ~/.config/polybar/py/spotify_status.py -t 29 -f '{artist}: {song}'
+format-underline = #84bd00
+
+[module/_wifi]
+type = custom/script
+interval = 1
+format-prefix = "直 "
+format = <label>
+exec = python3 ~/.config/polybar/py/wifi.py
+format-underline = ${colors.n1}
+
+[module/_cpu_temp]
+type = custom/script
+interval = 1
+format-prefix = " "
+format = <label>
+exec = sensors | grep "Tdie" | tr -d '+' | awk '{print $2}'
+format-underline = ${colors.n2}
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #f2cdcd
+;format-foreground = #f2cdcd
+label =  cpu (%percentage%%)
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = ${colors.n3}
+label =  %gb_used%
+
+[module/wlan]
+type = internal/network
+interface = wlp59s0
+interval = 3.0
+
+format-connected = <ramp-signal> <label-connected>
+format-connected-underline = #9f78e1
+label-connected = %essid%
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+ramp-signal-foreground = ${colors.foreground-alt}
+
+[module/eth]
+type = internal/network
+interface = enp0s31f6
+interval = 3.0
+
+format-connected-underline = #55aa55
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected = %local_ip%
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = " %Y-%m-%d"
+date-alt = " %Y-%m-%d"
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = ${colors.n3}
+
+;label = %date% %time%
+label =  %time%
+
+[module/alsa]
+type = internal/alsa
+
+format-volume = <label-volume>
+label-volume = 墳 %percentage%% 
+label-volume-foreground = ${root.foreground}
+
+format-muted-prefix = ""
+format-muted-underline = #ff5555
+format-volume-underline = ${colors.n1}
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = ﱙ
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+label-open = 
+label-open-foreground = ${colors.foreground}
+label-close =  cancel
+label-close-foreground = ${colors.secondary}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = sudo reboot
+
+menu-2-0 = power off
+menu-2-0-exec = sudo poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+[settings]
+screenchange-reload = true
+compositing-background = source
+compositing-foreground = over
+compositing-overline = over
+compositing-underline = over
+compositing-border = over
+pseudo-transparency = true
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+; vim:ft=dosini
